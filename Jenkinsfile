@@ -13,8 +13,11 @@ pipeline {
           }
       }
     stage('Deploy Container To Openshift') {
+      environment {
+            ARTIFACT_DOCKER_CREDS = credentials('artifactoryDocker')
+          }
       steps {
-        sh "oc login https://localhost:8443 --username admin --password admin --insecure-skip-tls-verify=true"
+        sh "oc login -u ${OPENSHIFT_CREDS_USR} -u ${OPENSHIFT_CREDS_PSW}"
         sh "oc project ${projectName} || oc new-project ${projectName}"
         sh "oc delete all --selector app=${projectName} || echo 'Unable to delete all previous openshift resources'"
         sh "oc new-app ${dockerImageTag} -l version=${version}"
