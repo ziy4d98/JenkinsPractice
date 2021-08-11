@@ -14,7 +14,7 @@ pipeline {
       }
     stage('Deploy Container To Openshift') {
       environment {
-            ARTIFACT_DOCKER_CREDS = credentials('artifactoryDocker')
+           OPENSHIFT_CREDS = credentials('openshiftCreds')
           }
       steps {
         sh "oc login -u ${OPENSHIFT_CREDS_USR} -u ${OPENSHIFT_CREDS_PSW}"
